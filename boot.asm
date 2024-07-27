@@ -1,45 +1,32 @@
 org 0x7C00
 
+use16
+
 start:
+    ; Установим стек
     mov ax, 0x07C0
     add ax, 288
     mov ss, ax
     mov sp, 4096
 
-    mov ah, 0x00
-    mov al, 0x03
+    ; Очистка экрана
+    mov ax, 0x03
     int 0x10
 
+    ; Вывод строки
+    mov si, message
+print_char:
+    lodsb
+    or al, al
+    jz hang
     mov ah, 0x0E
-    mov al, 'H'
     int 0x10
-    mov al, 'e'
-    int 0x10
-    mov al, 'l'
-    int 0x10
-    mov al, 'l'
-    int 0x10
-    mov al, 'o'
-    int 0x10
-    mov al, ','
-    int 0x10
-    mov al, ' '
-    int 0x10
-    mov al, 'w'
-    int 0x10
-    mov al, 'o'
-    int 0x10
-    mov al, 'r'
-    int 0x10
-    mov al, 'l'
-    int 0x10
-    mov al, 'd'
-    int 0x10
-    mov al, '!'
-    int 0x10
+    jmp print_char
 
 hang:
     jmp hang
 
+message db 'Hello, world!', 0
+
 times 510-($-$$) db 0
-dw 0xAA55 
+dw 0xAA55
